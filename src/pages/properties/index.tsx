@@ -1,40 +1,54 @@
 import axios from 'axios';
 import Head from 'next/head'
-import { useState } from 'react';
-import { Card, CardBody, CardTitle, CardSubtitle, CardText, CardImg } from 'reactstrap';
+import { useEffect, useState } from 'react';
+import { Card, CardBody, CardTitle, CardSubtitle, CardText, CardImg, Spinner } from 'reactstrap';
 
 export default function Properties() {
   const [properties, setProperties] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
   
   const renderProperties = async () => {
-    const properties = await axios.get('http://localhost:3333/properties/list'); 
-    setProperties(properties.data);
+    try {
+      setLoading(true);
+      const properties = await axios.get('http://localhost:3333/properties/list'); 
+      setProperties(properties.data);
+      setLoading(false);
+    } catch(err) {
+      setLoading(false);
+    }
   }
-  renderProperties();
+  
+  useEffect(() => {
+    renderProperties();
+  }, []);
 
   return (
     <>
       <Head>
         <title>Propriedades</title>
       </Head>
-      <div className='row'>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        gap: '30px',
+        width: '100vw',
+        flexWrap: 'wrap'
+      }}>
       {
-        properties.map(property => {
+        !loading ? (properties.map(property => {
           return (
-            <div className='col-sm-4' key={property.id}>
+            <div key={property.id}>
               <Card
                 style={{
                   width: '18rem'
                 }}
                 key={property.id}
-                className='col-sm-4'
               >
                 <CardBody>
                   <CardTitle tag="h5">
                     {property.name}
                   </CardTitle>
                   <CardSubtitle
-                    className="mb-2 text-muted"
                     tag="h6"
                   >
                     {property.negociation_type}
@@ -53,7 +67,9 @@ export default function Properties() {
               </Card>
             </div>
           )
-        })
+        })) : (
+          <Spinner />
+        )
       }
       </div>
     </>
