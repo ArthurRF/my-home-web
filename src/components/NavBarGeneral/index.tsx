@@ -26,13 +26,13 @@ export function NavBarGeneral() {
       <Collapse isOpen={isOpen} navbar>
         <Nav className="mr-auto" navbar>
           <NavItem>
-            <NavLink href="#">Site MyHome</NavLink>
+            <NavLink href="#">Contato</NavLink>
           </NavItem>
           <UncontrolledDropdown nav inNavbar>
             <DropdownToggle nav caret>
               Páginas
             </DropdownToggle>
-            <DropdownMenu right>
+            <DropdownMenu end>
               <DropdownItem href="/">Página Inicial</DropdownItem>
               <DropdownItem href="/properties">Propriedades</DropdownItem>
             </DropdownMenu>
