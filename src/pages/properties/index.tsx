@@ -1,12 +1,14 @@
 import axios from 'axios';
 import Head from 'next/head'
 import { useEffect, useState } from 'react';
-import { Card, CardBody, CardTitle, CardSubtitle, CardText, CardImg, Spinner, Modal, ModalBody, ModalFooter, ModalHeader, Button } from 'reactstrap';
+import { Card, CardBody, CardTitle, CardSubtitle, CardText, CardImg, Spinner } from 'reactstrap';
+import ModalProperty from '../../components/Modal';
 
 export default function Properties() {
   const [properties, setProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [modal, setModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState<string>()
   
   const renderProperties = async () => {
     try {
@@ -23,7 +25,11 @@ export default function Properties() {
     renderProperties();
   }, []);
 
-  const toggleModal = () => setModal(!modal);
+  const toggleModal = () => setShowModal(!showModal);
+  const selectProperty = (title: string) => {
+    setSelectedProperty(title);
+    toggleModal();
+  };
 
   return (
     <>
@@ -50,7 +56,7 @@ export default function Properties() {
                   color='primary'
                   outline
                   key={property.id}
-                  onClick={toggleModal}
+                  onClick={() => selectProperty(property.name)}
                 >
                   <CardBody>
                     <CardTitle tag="h5">
@@ -74,17 +80,9 @@ export default function Properties() {
                   </CardBody>
                 </Card>
               </div>
-              <Modal isOpen={modal} toggle={toggleModal}>
-                <ModalHeader toggle={toggleModal}>Modal title</ModalHeader>
-                <ModalBody>
-                  bla
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="secondary" onClick={toggleModal}>
-                    Cancel
-                  </Button>
-                </ModalFooter>
-              </Modal>
+              <ModalProperty showModal={showModal} toggleModal={toggleModal} title={selectedProperty}>
+                <p>ble</p>
+              </ModalProperty>
             </>
           )
         })) : (

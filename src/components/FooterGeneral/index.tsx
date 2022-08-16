@@ -5,7 +5,7 @@ import {
 export function FooterGeneral() {
   return (
     <CardFooter>
-      <ModalFooter>alo</ModalFooter>
+      <ModalFooter></ModalFooter>
     </CardFooter>
   );
 }
