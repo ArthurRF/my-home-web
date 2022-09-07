@@ -11,10 +11,10 @@ export default function Modal({
   showModal,
   toggleModal,
   children,
-  title = 'Hummm',
+  title = 'Sem nome',
 }: Props) {
   return (
-    <RSModal isOpen={showModal} toggle={toggleModal}>
+    <RSModal isOpen={showModal} toggle={toggleModal} centered={true}>
       <ModalHeader>{title}</ModalHeader>
       <ModalBody>
         {children}

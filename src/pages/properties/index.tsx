@@ -2,18 +2,37 @@ import axios from 'axios';
 import Head from 'next/head'
 import { useEffect, useState } from 'react';
 import { Card, CardBody, CardTitle, CardSubtitle, CardText, CardImg, Spinner } from 'reactstrap';
-import ModalProperty from '../../components/Modal';
+import PropertyModal from '../../components/PropertyModal';
+
+type PropertyType = {
+  address?: any;
+  bathrooms?: number;
+  bedrooms?: number;
+  description?: string;
+  enabled: boolean;
+  garages?: number;
+  id: string;
+  name: string;
+  negociation_type: number;
+  price: number;
+  property_images: any[];
+  property_type_slug: string;
+  size?: number;
+  suits?: number;
+  views: number;
+};
 
 export default function Properties() {
   const [properties, setProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [selectedProperty, setSelectedProperty] = useState<string>()
+  const [selectedProperty, setSelectedProperty] = useState<PropertyType>()
   
   const renderProperties = async () => {
     try {
       setLoading(true);
       const properties = await axios.get('http://localhost:3333/properties/list'); 
+      console.log(properties.data);
       setProperties(properties.data);
       setLoading(false);
     } catch(err) {
@@ -26,8 +45,8 @@ export default function Properties() {
   }, []);
 
   const toggleModal = () => setShowModal(!showModal);
-  const selectProperty = (title: string) => {
-    setSelectedProperty(title);
+  const selectProperty = (property: PropertyType) => {
+    setSelectedProperty(property);
     toggleModal();
   };
 
@@ -51,26 +70,24 @@ export default function Properties() {
               <div key={property.id}>
                 <Card
                   style={{
-                    width: '18rem'
+                    width: '18rem',
+                    cursor: 'pointer',
                   }}
-                  color='primary'
-                  outline
+                  color='secondary'
                   key={property.id}
-                  onClick={() => selectProperty(property.name)}
+                  onClick={() => selectProperty(property)}
                 >
                   <CardBody>
-                    <CardTitle tag="h5">
-                      {property.name}
+                    <CardTitle tag="h5" style={{ color: 'white' }}>
+                      {property.name.length > 23 ? `${property.name.slice(0, 23)}..` : property.name}
                     </CardTitle>
-                    <CardSubtitle
-                      tag="h6"
-                    >
+                    <CardSubtitle style={{ textDecoration: 'underline' }}>
                       {property.negociation_type}
                     </CardSubtitle>
                   </CardBody>
                   <CardImg
-                    alt="imagem"
-                    src={`https://picsum.photos/318/180`}
+                    alt="Imagem da propriedade"
+                    src={`https://user-images.githubusercontent.com/60706180/188971680-2c271ee8-e104-441f-be5b-39e038732acd.png`}
                     width="100%"
                   />
                   <CardBody>
@@ -80,9 +97,7 @@ export default function Properties() {
                   </CardBody>
                 </Card>
               </div>
-              <ModalProperty showModal={showModal} toggleModal={toggleModal} title={selectedProperty}>
-                <p>ble</p>
-              </ModalProperty>
+              {selectedProperty && (<PropertyModal showModal={showModal} toggleModal={toggleModal} property={selectedProperty} />)}
             </>
           )
         })) : (
