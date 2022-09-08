@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Button, Card, CardBody, Collapse, List } from "reactstrap";
+
 import Modal from "../Modal";
 import Image from 'next/image';
-import { useState } from "react";
+
 import { formatPrice } from '../../shared/formatPrice';
 
 type PropertyType = {
@@ -39,6 +41,7 @@ export default function PropertyModal({
     setShowSpecific(!showSpecific);
   };
 
+  console.log(property.bedrooms);
   return (
     <Modal showModal={showModal} toggleModal={toggleModal} title={property.name}>
       <div>
@@ -60,21 +63,27 @@ export default function PropertyModal({
           <Card>
             <CardBody>
             <List>
-              {property.price && (<li>
-                Valor: {formatPrice(property.price)}
-              </li>)}
-              {property.size && (<li>
+              {property.price ? (<li>
+                Valor: {formatPrice(Number(property.price))}
+              </li>) : null}
+              {property.size ? (<li>
                 Tamanho: {property.size}m²
-              </li>)}
-              {property.suits && (<li>
+              </li>) : null}
+              {property.suits ? (<li>
                 Suítes: {property.suits}
-              </li>)}
-              {property.bedrooms && (<li>
+              </li>) : null}
+              {property.bedrooms ? (<li>
                 Quartos Simples: {property.bedrooms}
-              </li>)}
-              {property.bedrooms && (<li>
+              </li>) : null}
+              {property.bathrooms ? (<li>
                 Banheiros Simples: {property.bathrooms}
-              </li>)}
+              </li>) : null}
+              {property.garages ? (<li>
+                Garagens: {property.garages}
+              </li>) : null}
+              {property.views ? (<li>
+                Visualizações: {property.views}
+              </li>) : null}
             </List>
             </CardBody>
           </Card>

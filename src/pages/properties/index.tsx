@@ -23,7 +23,7 @@ type PropertyType = {
 };
 
 export default function Properties() {
-  const [properties, setProperties] = useState<any[]>([]);
+  const [properties, setProperties] = useState<PropertyType[]>([]);
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState<PropertyType>()
@@ -32,7 +32,6 @@ export default function Properties() {
     try {
       setLoading(true);
       const properties = await axios.get('http://localhost:3333/properties/list'); 
-      console.log(properties.data);
       setProperties(properties.data);
       setLoading(false);
     } catch(err) {
@@ -81,8 +80,9 @@ export default function Properties() {
                     <CardTitle tag="h5" style={{ color: 'white' }}>
                       {property.name.length > 23 ? `${property.name.slice(0, 23)}..` : property.name}
                     </CardTitle>
-                    <CardSubtitle style={{ textDecoration: 'underline' }}>
-                      {property.negociation_type}
+                    <CardSubtitle style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <CardText style={{ all: 'unset' }}>{property.negociation_type}</CardText>
+                      <CardText>Visto {property.views} vezes</CardText>
                     </CardSubtitle>
                   </CardBody>
                   <CardImg
